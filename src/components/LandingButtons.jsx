@@ -1,11 +1,17 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const LandingButtons = ({ onStart }) => {
+  const navigate = useNavigate(); // Initialize navigation hook
+
   return (
     <div className="fixed w-full h-full flex justify-between p-4">
       {/* Emergency Button (Top Right) */}
-      <button className="absolute top-4 right-4 bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-red-700">
-        Emergency
+      <button
+        onClick={() => navigate("/emergency")} // Navigate to Emergency page
+        className="absolute top-4 right-4 bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-red-700"
+      >
+        🚨 Emergency
       </button>
 
       {/* Reset Button (Bottom Right) */}
@@ -19,7 +25,7 @@ const LandingButtons = ({ onStart }) => {
           onClick={onStart}
           className="bg-green-600 text-white text-lg font-semibold px-6 py-3 rounded-full shadow-lg hover:bg-green-700 transition-all duration-300 mt-10"
         >
-          Start
+          ▶ Start
         </button>
       </div>
     </div>

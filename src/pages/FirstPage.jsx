@@ -1,22 +1,18 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import TextInput from "../components/TextInput";
 import KioskButton from "../components/KioskButton";
-import EmergencyReset from "../components/EmergencyReset";
+import EmergencyPage from "./EmergencyPage";
 
 const FirstPage = () => {
   const [step, setStep] = useState(1);
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [reason, setReason] = useState("");
+  const navigate = useNavigate();
 
   const goNext = () => setStep(step + 1);
   const skipToOptions = () => setStep(4);
-  const resetForm = () => {
-    setStep(1);
-    setName("");
-    setAge("");
-    setReason("");
-  };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-blue-50 p-6">
@@ -53,7 +49,9 @@ const FirstPage = () => {
         </div>
       )}
 
-      <EmergencyReset onReset={resetForm} onEmergency={() => alert("Emergency Contact Triggered!")} />
+      <div className="mt-6">
+        <KioskButton text="🚨 Emergency" onClick={() => navigate("/emergency")} color="red" />
+      </div>
     </div>
   );
 };
