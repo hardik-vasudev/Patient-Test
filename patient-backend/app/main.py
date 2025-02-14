@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from jwt_routes import router as jwt_router
+from jwt_verify_routes import router as jwt_router
 from patient_routes import router as patient_router
-from chat_routes import router as chat_router
+from JIvanAI_routes import router as chat_router
 
 app = FastAPI()
 
