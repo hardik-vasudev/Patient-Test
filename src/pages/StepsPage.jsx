@@ -41,7 +41,7 @@ const StepsPage = () => {
       setStep(step + 1);
     } else {
       try {
-        const response = await axios.post("http://127.0.0.1:8001/patients/", userData);
+        const response = await axios.post("http://127.0.0.1:8000/patients/", userData);
         setPatientId(response.data.id);
       } catch (error) {
         console.error("Error saving patient data", error);
