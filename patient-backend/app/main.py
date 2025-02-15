@@ -3,7 +3,8 @@ import logging
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
-from pydantic import BaseModel, BaseSettings
+from pydantic import BaseModel
+from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 
 # Load environment variables from a .env file (for local development)
@@ -13,7 +14,7 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Define configuration using Pydantic BaseSettings
+# Define configuration using Pydantic BaseSettings from pydantic-settings
 class Settings(BaseSettings):
     MONGO_URI: str
     ALLOWED_ORIGINS: str = "*"  # Comma-separated list of allowed origins, or "*" to allow all
@@ -32,7 +33,7 @@ if not settings.MONGO_URI:
 # Attempt to connect to MongoDB using the provided URI
 try:
     client = MongoClient(settings.MONGO_URI)
-    server_info = client.server_info()  # This forces a connection attempt.
+    server_info = client.server_info()  # Force connection attempt
     logger.info("Connected to MongoDB: %s", server_info)
 except Exception as e:
     logger.error("Failed to connect to MongoDB: %s", e)
@@ -66,10 +67,10 @@ class Patient(BaseModel):
     name: str
     age: int
     reason: str
-    customReason: str | None = None
+    customReason: str | None = None  # Requires Python 3.10+; use Optional[str] if needed
 
 # Helper function to generate a short, random patient ID
-def generate_short_id():
+def generate_short_id() -> str:
     return os.urandom(4).hex()
 
 # Route to create a new patient record
@@ -91,7 +92,8 @@ async def create_patient(patient: Patient):
 async def get_patient(patient_id: str):
     patient = patients_collection.find_one({"patient_id": patient_id})
     if patient:
-        patient["_id"] = str(patient["_id"])  # Convert MongoDB ObjectId to string
+        # Convert MongoDB ObjectId to string for JSON serialization
+        patient["_id"] = str(patient["_id"])
         return patient
     else:
         raise HTTPException(status_code=404, detail="Patient not found")
