@@ -7,6 +7,7 @@ import PatientLogin from "./pages/PatientLogin";
 import EmergencyPage from "./pages/EmergencyPage"; // Import Emergency Page
 import WaitingScreen from "./pages/WaitingScreen"; // Import Waiting Screen
 import JivanAI from "./pages/JivanAI"; // Import JivanAI chatbot
+import PatientJitsiMeet from "./components/PatientJitsiMeet";
 
 function App() {
   return (

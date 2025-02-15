@@ -15,7 +15,7 @@ const PatientJitsiMeet = () => {
     if (!jwt) {
       // Fetch the JWT from backend based on the condition
       axios
-        .get("http://127.0.0.1:8001/api/get-jwt", { params: { condition } })
+        .get("http://127.0.0.1:8000/api/get-jwt", { params: { condition } })
         .then((response) => {
           setJwt(response.data.jwt);
         })

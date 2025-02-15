@@ -12,7 +12,7 @@ const WaitingScreen = () => {
   const handleFetchPatientData = async () => {
     try {
       console.log('Fetching patient data for ID:', patientId);
-      const response = await axios.get(`http://127.0.0.1:8001/patients/${patientId}`);
+      const response = await axios.get(`http://127.0.0.1:8000/patients/${patientId}`);
       console.log('Patient data received:', response.data);
       setPatientData(response.data);
       setError('');

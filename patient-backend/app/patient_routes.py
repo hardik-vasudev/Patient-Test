@@ -1,21 +1,30 @@
+# patient_routes.py
 from fastapi import APIRouter, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 from pydantic import BaseModel
 from dotenv import load_dotenv
 import os
 
+# Load environment variables
 load_dotenv()
 MONGO_URI = os.getenv("MONGO_URI")
 if not MONGO_URI:
     raise HTTPException(status_code=500, detail="MONGO_URI not found")
 
-client = MongoClient(MONGO_URI)
+# Connect to MongoDB and log connection details
+try:
+    client = MongoClient(MONGO_URI)
+    print("Connected to MongoDB:", client.server_info())
+except Exception as e:
+    print("Failed to connect to MongoDB:", e)
+    raise HTTPException(status_code=500, detail="Failed to connect to MongoDB")
+
 db = client["BharatTelemed"]
 patients_collection = db["patients"]
 
 router = APIRouter()
 
+# Define the Patient model
 class Patient(BaseModel):
     name: str
     age: int
@@ -33,6 +42,7 @@ async def create_patient(patient: Patient):
         patients_collection.insert_one(patient_data)
         return {"id": patient_data["patient_id"], "message": "Patient data inserted successfully"}
     except Exception as e:
+        print(f"Error inserting patient data: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to insert patient data: {e}")
 
 @router.get("/patients/{patient_id}")
