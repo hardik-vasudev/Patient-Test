@@ -47,10 +47,10 @@ groq_client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
 # ----------------------------
 app = FastAPI()
 
-# Set up CORS middleware (adjust allowed_origins for production)
+# Set up CORS middleware for production: allow only the deployed frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Change this to your frontend URL(s) in production
+    allow_origins=["https://patient-test-drab.vercel.app"],  # Production frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -145,4 +145,6 @@ async def chat(request: ChatRequest):
 # ----------------------------
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8001, reload=True)
+    # Use the PORT environment variable if available, default to 8001
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port, reload=True)
